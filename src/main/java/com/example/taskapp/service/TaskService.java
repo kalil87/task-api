@@ -6,6 +6,7 @@ import com.example.taskapp.exception.TaskNotFoundException;
 import com.example.taskapp.mapper.TaskMapper;
 import com.example.taskapp.model.Task;
 import com.example.taskapp.repository.TaskRepository;
+import com.example.taskapp.util.Message;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public class TaskService {
 
     private Task findTask(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new TaskNotFoundException("Task not found"));
+                .orElseThrow(() -> new TaskNotFoundException(Message.TASK_NOT_FOUND));
     }
 
     public List<TaskResponseDTO> getAll(){
