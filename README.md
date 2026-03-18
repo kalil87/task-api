@@ -1,6 +1,6 @@
 # Task API - Spring Boot
 
-Simple REST API for task management built with Spring Boot.
+Simple REST API for task management built with Spring Boot, PostgreSQL (Neon) and deployed on Railway
 
 This project was created as a backend practice project to implement a RESTful API with validation, service layer separation, and global exception handling.
 
@@ -28,6 +28,8 @@ This project was created as a backend practice project to implement a RESTful AP
 - Hibernate
 - Jakarta Validation
 - Maven
+- PostgreSQL (Neon)
+- Railway (deploy)
 
 ---
 
@@ -35,6 +37,13 @@ This project was created as a backend practice project to implement a RESTful AP
 
 - Java 17+
 - Maven
+
+---
+
+## 📄 Documentation (Swagger)
+
+You can test the endpoints from:
+https://taskapi.up.railway.app/swagger-ui/index.html
 
 ---
 
@@ -134,6 +143,17 @@ Example response:
 ##  Architecture
 
 Controller → Service → Repository → Database
+
+---
+
+## ⚙️ Environmental variables
+
+The application requires:
+
+- DB_URL
+- DB_USER
+- DB_PASSWORD
+- PORT (optional, Railway defines it automatically)
 
 ---
 
