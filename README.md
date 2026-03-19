@@ -1,6 +1,6 @@
-# Task API - Spring Boot
+# Task API
 
-Simple REST API for task management built with Spring Boot, PostgreSQL (Neon) and deployed on Railway
+Simple REST API for task management built with Spring Boot, PostgreSQL (Neon), and deployed on Railway.
 
 This project was created as a backend practice project to implement a RESTful API with validation, service layer separation, and global exception handling.
 
@@ -8,14 +8,11 @@ This project was created as a backend practice project to implement a RESTful AP
 
 ## Features
 
-- Create tasks
-- Get all tasks
-- Get task by id
-- Update tasks
-- Delete tasks
-- Request validation using `@Valid`
+- RESTful API design
+- CRUD operations for tasks
+- Request validation using @Valid
 - Global exception handling
-- Clean layered architecture (Controller → Service → Repository)
+- Layered architecture (Controller → Service → Repository)
 
 ---
 
@@ -24,25 +21,32 @@ This project was created as a backend practice project to implement a RESTful AP
 - Java
 - Spring Boot
 - Spring Web
-- Spring Data JPA
-- Hibernate
+- Spring Data JPA (Hibernate)
 - Jakarta Validation
 - Maven
 - PostgreSQL (Neon)
 - Railway (deploy)
+- Swagger (OpenAPI)
 
 ---
 
 ## Requirements
 
 - Java 17+
-- Maven
+- Maven 3+
+
+---
+
+## 🌐 Live API
+
+Base URL:
+https://taskapi.up.railway.app
 
 ---
 
 ## 📄 Documentation (Swagger)
 
-You can test the endpoints from:
+Swagger UI:
 https://taskapi.up.railway.app/swagger-ui/index.html
 
 ---
@@ -109,23 +113,20 @@ Example error response:
 }
 ```
 
-## Health / Test Endpoint
+## Health Check
 
-You can test the API using:
+Endpoint to verify the API is running:
 
-GET `/api/tasks`
+GET `/api/health`
 
 Example response:
 
 ```json
-[
-  {
-    "id": 1,
-    "title": "Learn Spring Boot",
-    "completed": false
-  }
-]
+{
+  "status": "OK"
+}
 ```
+
 ---
 
 ## Project Structure
@@ -140,43 +141,67 @@ Example response:
 
 ---
 
-##  Architecture
+## Architecture
 
 Controller → Service → Repository → Database
 
 ---
 
-## ⚙️ Environmental variables
+## ⚙️ Environment Variables
 
-The application requires:
+The application requires the following environment variables:
 
 - DB_URL
 - DB_USER
 - DB_PASSWORD
-- PORT (optional, Railway defines it automatically)
+- PORT (optional, automatically provided by Railway)
 
 ---
 
-## How to Run
+## Profiles
 
-Clone the repository:
+The application uses Spring profiles:
 
-`git clone https://github.com/kalil87/task-api.git`
+- local → local development
+- prod → production (Railway)
 
-Navigate to the project folder:
+Railway uses environment variables to configure the database connection.
 
-`cd task-api`
+---
 
-Run the application:
+## How to Run (Local)
 
-`./mvnw spring-boot:run`
+```json
+1. Clone the repository
+
+git clone https://github.com/kalil87/task-api.git
+
+2. Navigate to the project
+
+cd task-api
+
+3. Set environment variables
+
+DB_URL=jdbc:postgresql://localhost:5432/your_db  
+DB_USER=your_user  
+DB_PASSWORD=your_password  
+SPRING_PROFILES_ACTIVE=local
+
+4. Run the application
+
+./mvnw spring-boot:run -Dspring-boot.run.profiles=local
 
 The API will start at:
 
-`http://localhost:8080`
+http://localhost:8080
+```
 
 ---
 
-##  Author
+## Author
 
 GitHub: https://github.com/kalil87
+
+---
+
+This project is part of my backend development learning path.
