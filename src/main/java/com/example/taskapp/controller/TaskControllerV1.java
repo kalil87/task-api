@@ -1,28 +1,33 @@
 package com.example.taskapp.controller;
 
+import com.example.taskapp.dto.PageResponse;
 import com.example.taskapp.dto.TaskCreateDTO;
 import com.example.taskapp.dto.TaskResponseDTO;
+import com.example.taskapp.mapper.PageMapper;
 import com.example.taskapp.service.TaskService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
+@Tag(name = "Tasks", description = "Operations related to tasks")
 @RestController
 @RequestMapping("/api/v1/tasks")
-public class TaskController {
+public class TaskControllerV1 {
 
     private final TaskService service;
 
-    public TaskController(TaskService service) {
+    public TaskControllerV1(TaskService service) {
         this.service = service;
     }
 
     @GetMapping
-    public ResponseEntity<List<TaskResponseDTO>> getAll() {
-        return ResponseEntity.ok(service.getAll());
+    public ResponseEntity<PageResponse<TaskResponseDTO>> getAll(@PageableDefault(size = 5, sort = "id") Pageable pageable) {
+        return ResponseEntity.ok(PageMapper.toPageResponse(service.getAll(pageable)));
     }
 
     @GetMapping("/{id}")

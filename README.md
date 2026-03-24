@@ -169,32 +169,43 @@ Railway uses environment variables to configure the database connection.
 
 ---
 
-## How to Run (Local)
+## Run locally
 
 ```json
 1. Clone the repository
 
 git clone https://github.com/kalil87/task-api.git
 
-2. Navigate to the project
+2. Go to the project folder
 
 cd task-api
 
-3. Set environment variables
+3. Configure database (application-prod.properties)
 
 DB_URL=jdbc:postgresql://localhost:5432/your_db  
 DB_USER=your_user  
-DB_PASSWORD=your_password  
-SPRING_PROFILES_ACTIVE=local
+DB_PASSWORD=your_password
 
 4. Run the application
 
-./mvnw spring-boot:run -Dspring-boot.run.profiles=local
+./mvnw spring-boot:run -Dspring-boot.run.profiles=prod
 
 The API will start at:
 
 http://localhost:8080
 ```
+
+---
+
+### API Usage
+
+Base URL:
+
+http://localhost:8080
+
+Example endpoint:
+
+GET http://localhost:8080/api/v1/tasks
 
 ---
 

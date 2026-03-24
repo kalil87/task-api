@@ -7,9 +7,9 @@ import com.example.taskapp.mapper.TaskMapper;
 import com.example.taskapp.model.Task;
 import com.example.taskapp.repository.TaskRepository;
 import com.example.taskapp.util.Message;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class TaskService {
@@ -25,8 +25,8 @@ public class TaskService {
                 .orElseThrow(() -> new TaskNotFoundException(Message.TASK_NOT_FOUND));
     }
 
-    public List<TaskResponseDTO> getAll(){
-        return TaskMapper.toDTOList(repository.findAll());
+    public Page<TaskResponseDTO> getAll(Pageable pageable){
+        return repository.findAll(pageable).map(TaskMapper::toDTO);
     }
 
     public TaskResponseDTO getById(Long id) {
