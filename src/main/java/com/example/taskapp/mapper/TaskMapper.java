@@ -6,30 +6,12 @@ import com.example.taskapp.model.Task;
 
 import java.util.List;
 
-public class TaskMapper {
-    public static Task toEntity(TaskCreateDTO dto) {
+import org.mapstruct.Mapper;
 
-        Task task = new Task();
+@Mapper(componentModel = "spring")
+public interface TaskMapper {
 
-        task.setTitle(dto.title());
-        task.setCompleted(dto.completed());
+    TaskResponseDTO toDTO(Task task);
 
-        return task;
-    }
-
-    public static TaskResponseDTO toDTO(Task task) {
-
-        return new TaskResponseDTO(
-                task.getId(),
-                task.getTitle(),
-                task.getCompleted()
-        );
-    }
-
-    public static List<TaskResponseDTO> toDTOList(List<Task> tasks) {
-
-        return tasks.stream()
-                .map(TaskMapper::toDTO)
-                .toList();
-    }
+    Task toEntity(TaskCreateDTO dto);
 }

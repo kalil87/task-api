@@ -3,10 +3,10 @@ package com.example.taskapp.mapper;
 import com.example.taskapp.dto.PageResponse;
 import org.springframework.data.domain.Page;
 
-public class PageMapper<T> {
+public class PageMapper {
 
     public static <T> PageResponse<T> toPageResponse(Page<T> page) {
-        return new PageResponse<T>(
+        return new PageResponse<>(
                 page.getContent(),
                 page.getNumber(),
                 page.getSize(),

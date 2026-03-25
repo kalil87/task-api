@@ -5,9 +5,7 @@ import lombok.*;
 
 @Entity
 @Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Task {
 
     @Id
@@ -15,6 +13,20 @@ public class Task {
     private Long id;
 
     private String title;
-
     private Boolean completed;
+
+    public Task(String title, Boolean completed) {
+        this.title = title;
+        this.completed = completed;
+    }
+
+    public void updateTitle(String title) {
+        this.title = title;
+    }
+
+    public void updateCompleted(Boolean completed) {
+        if (completed != null) {
+            this.completed = completed;
+        }
+    }
 }

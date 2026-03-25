@@ -13,11 +13,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class TaskService {
-
     private final TaskRepository repository;
+    private final TaskMapper mapper;
 
-    public TaskService(TaskRepository repository){
+    public TaskService(TaskRepository repository, TaskMapper mapper){
         this.repository = repository;
+        this.mapper = mapper;
     }
 
     private Task findTask(Long id) {
@@ -26,40 +27,30 @@ public class TaskService {
     }
 
     public Page<TaskResponseDTO> getAll(Pageable pageable){
-        return repository.findAll(pageable).map(TaskMapper::toDTO);
+        return repository.findAll(pageable).map(mapper::toDTO);
     }
 
     public TaskResponseDTO getById(Long id) {
-
         Task task = findTask(id);
-
-        return TaskMapper.toDTO(task);
+        return mapper.toDTO(task);
     }
 
     public TaskResponseDTO create(TaskCreateDTO dto) {
-
-        Task task = TaskMapper.toEntity(dto);
+        Task task = mapper.toEntity(dto);
         Task saved = repository.save(task);
-
-        return TaskMapper.toDTO(saved);
+        return mapper.toDTO(saved);
     }
 
     public TaskResponseDTO update(Long id, TaskCreateDTO dto) {
-
         Task existing = findTask(id);
-
-        existing.setTitle(dto.title());
-        existing.setCompleted(dto.completed());
-
+        existing.updateTitle(dto.title());
+        existing.updateCompleted(dto.completed());
         Task updated = repository.save(existing);
-
-        return TaskMapper.toDTO(updated);
+        return mapper.toDTO(updated);
     }
 
     public void delete(Long id) {
-
         Task task = findTask(id);
-
         repository.delete(task);
     }
 }
