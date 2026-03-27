@@ -1,4 +1,4 @@
-# Task API
+# 📌 Task API
 
 Simple REST API for task management built with Spring Boot, PostgreSQL (Neon), and deployed on Railway.
 
@@ -6,7 +6,7 @@ This project was created as a backend practice project to implement a RESTful AP
 
 ---
 
-## Features
+## ⚙️ Features
 
 - RESTful API design
 - CRUD operations for tasks
@@ -16,7 +16,7 @@ This project was created as a backend practice project to implement a RESTful AP
 
 ---
 
-## Tech Stack
+## 📦 Tech Stack
 
 - Java
 - Spring Boot
@@ -30,7 +30,7 @@ This project was created as a backend practice project to implement a RESTful AP
 
 ---
 
-## Requirements
+## ⚙️ Requirements
 
 - Java 17+
 - Maven 3+
@@ -40,32 +40,47 @@ This project was created as a backend practice project to implement a RESTful AP
 ## 🌐 Live API
 
 Base URL:
-https://taskapi.up.railway.app
+
+https://taskapi.up.railway.app/api/v1/tasks
 
 ---
 
-## 📄 Documentation (Swagger)
+## 📝 Documentation (Swagger)
 
 Swagger UI:
+
 https://taskapi.up.railway.app/swagger-ui/index.html
 
 ---
 
-## API Endpoints
+## 📡 API Endpoints
 
 | Method | Endpoint | Description |
 |------|------|------|
-| GET | /api/tasks | Get all tasks |
-| GET | /api/tasks/{id} | Get task by id |
-| POST | /api/tasks | Create task |
-| PUT | /api/tasks/{id} | Update task |
-| DELETE | /api/tasks/{id} | Delete task |
+| GET | /api/v1/tasks | Get all tasks |
+| GET | /api/v1/tasks/{id} | Get task by id |
+| POST | /api/v1/tasks | Create task |
+| PUT | /api/v1/tasks/{id} | Update task |
+| DELETE | /api/v1/tasks/{id} | Delete task |
+
+---
+## ⚙️ Pagination
+
+You can paginate results using query parameters:
+
+GET /api/v1/tasks?page=0&size=5&sort=id,asc
+
+Parameters:
+
+- page → page number (starts from 0)
+- size → number of elements per page
+- sort → field and direction (e.g., id,asc, title,desc or completed,asc)
 
 ---
 
-## Example Request
+## 📤 Example Request
 
-POST `/api/tasks`
+POST `/api/v1/tasks`
 
 ```json
 {
@@ -74,7 +89,7 @@ POST `/api/tasks`
 }
 ```
 
-## Example Response
+## 📤 Example Response
 
 ```json
 {
@@ -84,24 +99,14 @@ POST `/api/tasks`
 }
 ```
 
-## Validation Example
-
-If validation fails, the API returns structured errors.
-
-```json
-{
-  "title": "must not be blank"
-}
-```
-
-## Error Handling
+## ⚠️ Error Handling
 
 The API uses a **GlobalExceptionHandler** to handle errors like:
 
-- Validation errors
 - Task not found
+- Validation errors
 
-Example error response:
+Example Task Not Found error response:
 
 ```json
 {
@@ -113,23 +118,55 @@ Example error response:
 }
 ```
 
-## Health Check
+Example Validation errors response:
 
-Endpoint to verify the API is running:
-
-GET `/api/health`
-
-Example response:
+If validation fails, the API returns structured errors.
 
 ```json
 {
-  "status": "OK"
+  "timestamp": "2026-03-26T14:29:24.2376194",
+  "status": 400,
+  "error": "Validation Error",
+  "message": "Invalid request",
+  "path": "/api/v1/tasks",
+  "errors": {
+    "completed": "completed must not be null",
+    "title": "title must be between 3 and 50 characters"
+  }
+}
+```
+
+---
+## 📊 Monitoring (Actuator)
+
+Spring Boot Actuator is enabled to monitor application health.
+
+Base URL:
+
+https://taskapi.up.railway.app/actuator
+
+Endpoint:
+
+GET /actuator/health → application health status
+
+Example:
+
+también válido:
+
+🩺 GET https://taskapi.up.railway.app/actuator/health
+
+📈 GET https://taskapi.up.railway.app/actuator/info
+
+
+```json
+{
+  "status": "UP"
 }
 ```
 
 ---
 
-## Project Structure
+## 📁 Project Structure
 
 - controller
 - service
@@ -141,13 +178,13 @@ Example response:
 
 ---
 
-## Architecture
+## 📁 Architecture
 
 Controller → Service → Repository → Database
 
 ---
 
-## ⚙️ Environment Variables
+## 🔐 Environment Variables
 
 The application requires the following environment variables:
 
@@ -158,7 +195,7 @@ The application requires the following environment variables:
 
 ---
 
-## Profiles
+## ☁️ Profiles
 
 The application uses Spring profiles:
 
@@ -169,35 +206,41 @@ Railway uses environment variables to configure the database connection.
 
 ---
 
-## Run locally
+## 🧪 Run locally
 
 ```json
+🚀 Getting Started
+        
 1. Clone the repository
-
+        
 git clone https://github.com/kalil87/task-api.git
-
-2. Go to the project folder
-
+        
 cd task-api
+        
+2. Configure environment variables
 
-3. Configure database (application-prod.properties)
+Copy the example file:
 
-DB_URL=jdbc:postgresql://localhost:5432/your_db  
-DB_USER=your_user  
+cp .env.example .env
+
+Then edit .env with your database credentials:
+
+DB_URL=jdbc:postgresql://localhost:5432/your_db
+DB_USER=your_user
 DB_PASSWORD=your_password
+        
+3. Run the application
 
-4. Run the application
+./run-local.sh
 
-./mvnw spring-boot:run -Dspring-boot.run.profiles=prod
-
-The API will start at:
+4. API URL
 
 http://localhost:8080
 ```
 
 ---
 
-### API Usage
+### ⚙️ API Usage
 
 Base URL:
 
@@ -209,7 +252,7 @@ GET http://localhost:8080/api/v1/tasks
 
 ---
 
-## Author
+## 👤 Author
 
 GitHub: https://github.com/kalil87
 
