@@ -206,37 +206,36 @@ Railway uses environment variables to configure the database connection.
 
 ---
 
-## 🧪 Run locally
-
-```json
-🚀 Getting Started
+## 🚀 Run locally
         
-1. Clone the repository
+1. **Clone the repository**
+
+`git clone https://github.com/kalil87/task-api.`
         
-git clone https://github.com/kalil87/task-api.git
+2. **Go to the project directory**
+
+`cd task-api`
         
-cd task-api
-        
-2. Configure environment variables
+3. **Run the application**
 
-Copy the example file:
+`./run-local.sh`
 
-cp .env.example .env
+4. **API URL**
 
-Then edit .env with your database credentials:
+`http://localhost:8080/api/v1/tasks`
 
-DB_URL=jdbc:postgresql://localhost:5432/your_db
-DB_USER=your_user
-DB_PASSWORD=your_password
-        
-3. Run the application
 
-./run-local.sh
+---
 
-4. API URL
+## 🧪 H2 Console (optional)
 
-http://localhost:8080
-```
+You can inspect the in-memory database at:
+
+`http://localhost:8080/h2-console`
+
+**JDBC URL:** `jdbc:h2:mem:testdb`  
+**User:** `sa`  
+**Password:** (empty)
 
 ---
 
@@ -244,7 +243,7 @@ http://localhost:8080
 
 Base URL:
 
-http://localhost:8080
+`http://localhost:8080`
 
 Example endpoint:
 
