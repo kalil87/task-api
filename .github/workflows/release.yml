@@ -1,36 +1,38 @@
-name: Deploy & Release
+name: CI & Release
 
 on:
   push:
-    branches:
-      - main
-    tags:
-      - 'v*'
+    branches: [ main ]
+    tags: [ 'v*' ]
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+permissions:
+  contents: write
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v3
-      - name: Set up JDK 17
+
+      - name: Set up JDK
         uses: actions/setup-java@v3
         with:
-          java-version: '17'
+          java-version: '21'
+          distribution: 'temurin'
 
       - name: Build
-        run: ./mvnw clean package
+        run: ./mvnw clean verify
 
-      - name: Login Railway
-        run: railway login --apiKey ${{ secrets.RAILWAY_TOKEN }}
+  release:
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: build
+    runs-on: ubuntu-latest
 
-      - name: Deploy
-        run: railway up --production
+    steps:
+      - uses: actions/checkout@v3
 
-      - name: Create GitHub Release
+      - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
           generate_release_notes: true
