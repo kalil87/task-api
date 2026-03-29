@@ -1,6 +1,4 @@
 # 📌 Task API
-![Release](https://img.shields.io/github/v/release/kalil87/task-api)
-[![CI](https://github.com/kalil87/task-api/actions/workflows/release.yml/badge.svg)](https://github.com/kalil87/task-api/actions/workflows/release.yml)
 
 Simple REST API for task management built with Spring Boot, PostgreSQL (Neon), and deployed on Railway.
 
