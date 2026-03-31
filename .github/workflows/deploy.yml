@@ -17,12 +17,12 @@ jobs:
 
       - name: Deploy to Staging
         if: github.ref == 'refs/heads/develop'
-        run: railway up --environment staging
+        run: railway up --environment staging --service task-api
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN_STAGING }}
 
       - name: Deploy to Production
         if: github.ref == 'refs/heads/main'
-        run: railway up --environment production
+        run: railway up --environment production --service task-api
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN_PRODUCTION }}
