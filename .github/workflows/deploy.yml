@@ -9,19 +9,20 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
       - name: Install Railway CLI
         run: npm install -g @railway/cli
 
-      - name: Deploy to Staging
-        if: github.ref == 'refs/heads/develop'
-        run: railway up --environment staging --service task-api
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN_STAGING }}
+      # =========================
+      # 🚀 STAGING (develop)
+      # =========================
 
       - name: Create GitHub Deployment (staging)
+        if: github.ref == 'refs/heads/develop'
+        id: deployment_staging
         uses: actions/github-script@v7
         with:
           script: |
@@ -33,22 +34,34 @@ jobs:
               auto_merge: false,
               required_contexts: []
             });
+            core.setOutput("deployment_id", deployment.data.id);
 
+      - name: Deploy to Staging
+        if: github.ref == 'refs/heads/develop'
+        run: railway up --environment staging --service task-api
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN_STAGING }}
+
+      - name: Mark Deployment Success (staging)
+        if: github.ref == 'refs/heads/develop'
+        uses: actions/github-script@v7
+        with:
+          script: |
             await github.rest.repos.createDeploymentStatus({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              deployment_id: deployment.data.id,
+              deployment_id: ${{ steps.deployment_staging.outputs.deployment_id }},
               state: "success",
               environment_url: "https://taskapi.up.railway.app"
             });
 
-      - name: Deploy to Production
-        if: github.ref == 'refs/heads/main'
-        run: railway up --environment production --service task-api
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN_PRODUCTION }}
+      # =========================
+      # 🚀 PRODUCTION (main)
+      # =========================
 
       - name: Create GitHub Deployment (production)
+        if: github.ref == 'refs/heads/main'
+        id: deployment_production
         uses: actions/github-script@v7
         with:
           script: |
@@ -60,11 +73,23 @@ jobs:
               auto_merge: false,
               required_contexts: []
             });
+            core.setOutput("deployment_id", deployment.data.id);
 
+      - name: Deploy to Production
+        if: github.ref == 'refs/heads/main'
+        run: railway up --environment production --service task-api
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN_PRODUCTION }}
+
+      - name: Mark Deployment Success (production)
+        if: github.ref == 'refs/heads/main'
+        uses: actions/github-script@v7
+        with:
+          script: |
             await github.rest.repos.createDeploymentStatus({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              deployment_id: deployment.data.id,
+              deployment_id: ${{ steps.deployment_production.outputs.deployment_id }},
               state: "success",
               environment_url: "https://taskapi.up.railway.app"
             });
