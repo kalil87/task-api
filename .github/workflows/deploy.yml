@@ -35,6 +35,18 @@ jobs:
               required_contexts: []
             });
             core.setOutput("deployment_id", deployment.data.id);
+            
+      - name: Mark Deployment In Progress (staging)
+        if: github.ref == 'refs/heads/develop'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.repos.createDeploymentStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              deployment_id: ${{ steps.deployment_staging.outputs.deployment_id }},
+              state: "in_progress"
+            });
 
       - name: Deploy to Staging
         if: github.ref == 'refs/heads/develop'
@@ -43,7 +55,7 @@ jobs:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN_STAGING }}
 
       - name: Mark Deployment Success (staging)
-        if: github.ref == 'refs/heads/develop'
+        if: github.ref == 'refs/heads/develop' && success()
         uses: actions/github-script@v7
         with:
           script: |
@@ -74,6 +86,18 @@ jobs:
               required_contexts: []
             });
             core.setOutput("deployment_id", deployment.data.id);
+            
+      - name: Mark Deployment In Progress (production)
+        if: github.ref == 'refs/heads/main'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.repos.createDeploymentStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              deployment_id: ${{ steps.deployment_production.outputs.deployment_id }},
+              state: "in_progress"
+            });
 
       - name: Deploy to Production
         if: github.ref == 'refs/heads/main'
@@ -82,7 +106,7 @@ jobs:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN_PRODUCTION }}
 
       - name: Mark Deployment Success (production)
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main' && success()
         uses: actions/github-script@v7
         with:
           script: |
