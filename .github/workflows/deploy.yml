@@ -7,113 +7,38 @@ on:
       - develop
 
 jobs:
-  deploy:
+  deploy-staging:
+    name: Deploy to Staging
+    if: github.ref == 'refs/heads/develop'
     runs-on: ubuntu-latest
+    environment: staging
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Install Railway CLI
         run: npm install -g @railway/cli
 
-      # =========================
-      # 🚀 STAGING (develop)
-      # =========================
-
-      - name: Create GitHub Deployment (staging)
-        if: github.ref == 'refs/heads/develop'
-        id: deployment_staging
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const deployment = await github.rest.repos.createDeployment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: context.sha,
-              environment: "staging",
-              auto_merge: false,
-              required_contexts: []
-            });
-            core.setOutput("deployment_id", deployment.data.id);
-            
-      - name: Mark Deployment In Progress (staging)
-        if: github.ref == 'refs/heads/develop'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            await github.rest.repos.createDeploymentStatus({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              deployment_id: ${{ steps.deployment_staging.outputs.deployment_id }},
-              state: "in_progress"
-            });
-
       - name: Deploy to Staging
-        if: github.ref == 'refs/heads/develop'
         run: railway up --environment staging --service task-api
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN_STAGING }}
 
-      - name: Mark Deployment Success (staging)
-        if: github.ref == 'refs/heads/develop' && success()
-        uses: actions/github-script@v7
-        with:
-          script: |
-            await github.rest.repos.createDeploymentStatus({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              deployment_id: ${{ steps.deployment_staging.outputs.deployment_id }},
-              state: "success",
-              environment_url: "https://taskapi.up.railway.app"
-            });
+  deploy-production:
+    name: Deploy to Production
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: production
 
-      # =========================
-      # 🚀 PRODUCTION (main)
-      # =========================
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Create GitHub Deployment (production)
-        if: github.ref == 'refs/heads/main'
-        id: deployment_production
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const deployment = await github.rest.repos.createDeployment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: context.sha,
-              environment: "production",
-              auto_merge: false,
-              required_contexts: []
-            });
-            core.setOutput("deployment_id", deployment.data.id);
-            
-      - name: Mark Deployment In Progress (production)
-        if: github.ref == 'refs/heads/main'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            await github.rest.repos.createDeploymentStatus({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              deployment_id: ${{ steps.deployment_production.outputs.deployment_id }},
-              state: "in_progress"
-            });
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
 
       - name: Deploy to Production
-        if: github.ref == 'refs/heads/main'
         run: railway up --environment production --service task-api
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN_PRODUCTION }}
-
-      - name: Mark Deployment Success (production)
-        if: github.ref == 'refs/heads/main' && success()
-        uses: actions/github-script@v7
-        with:
-          script: |
-            await github.rest.repos.createDeploymentStatus({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              deployment_id: ${{ steps.deployment_production.outputs.deployment_id }},
-              state: "success",
-              environment_url: "https://taskapi.up.railway.app"
-            });
