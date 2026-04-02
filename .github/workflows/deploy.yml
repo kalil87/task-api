@@ -1,3 +1,49 @@
+#name: Deploy
+#
+#on:
+#  push:
+#    branches:
+#      - main
+#      - develop
+#
+#jobs:
+#  deploy-staging:
+#    name: Deploy to Staging
+#    if: github.ref == 'refs/heads/develop'
+#    runs-on: ubuntu-latest
+#    environment: staging
+#
+#    steps:
+#      - name: Checkout repository
+#        uses: actions/checkout@v4
+#
+#      - name: Install Railway CLI
+#        run: npm install -g @railway/cli
+#
+#      - name: Deploy to Staging
+#        run: railway up --environment staging --service task-api
+#        env:
+#          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN_STAGING }}
+#          SPRING_PROFILES_ACTIVE: dev
+#
+#  deploy-production:
+#    name: Deploy to Production
+#    if: github.ref == 'refs/heads/main'
+#    runs-on: ubuntu-latest
+#    environment: production
+#
+#    steps:
+#      - name: Checkout repository
+#        uses: actions/checkout@v4
+#
+#      - name: Install Railway CLI
+#        run: npm install -g @railway/cli
+#
+#      - name: Deploy to Production
+#        run: railway up --environment production --service task-api
+#        env:
+#          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN_PRODUCTION }}
+#          SPRING_PROFILES_ACTIVE: prod
 name: Deploy
 
 on:
@@ -8,39 +54,17 @@ on:
 
 jobs:
   deploy-staging:
-    name: Deploy to Staging
     if: github.ref == 'refs/heads/develop'
     runs-on: ubuntu-latest
-    environment: staging
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Install Railway CLI
-        run: npm install -g @railway/cli
-
-      - name: Deploy to Staging
-        run: railway up --environment staging --service task-api
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN_STAGING }}
-          SPRING_PROFILES_ACTIVE: dev
+      - name: Trigger Render Deploy (staging)
+        run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_STAGING }}
 
   deploy-production:
-    name: Deploy to Production
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    environment: production
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Install Railway CLI
-        run: npm install -g @railway/cli
-
-      - name: Deploy to Production
-        run: railway up --environment production --service task-api
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN_PRODUCTION }}
-          SPRING_PROFILES_ACTIVE: prod
+      - name: Trigger Render Deploy (production)
+        run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_PRODUCTION }}
