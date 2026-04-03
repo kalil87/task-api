@@ -1,8 +1,7 @@
 # 📌 Task API
 ![Release](https://img.shields.io/github/v/release/kalil87/task-api)
-[![CI](https://github.com/kalil87/task-api/actions/workflows/release.yml/badge.svg)](https://github.com/kalil87/task-api/actions/workflows/release.yml)
 
-Simple REST API for task management built with Spring Boot, PostgreSQL (Neon), and deployed on Railway.
+Simple REST API for task management built with Spring Boot, PostgreSQL (Neon), and deployed on Render.
 
 This project was created as a backend practice project to implement a RESTful API with validation, service layer separation, and global exception handling.
 
@@ -27,7 +26,8 @@ This project was created as a backend practice project to implement a RESTful AP
 - Jakarta Validation
 - Maven
 - PostgreSQL (Neon)
-- Railway (deploy)
+- Docker
+- Render (deploy)
 - Swagger (OpenAPI)
 
 ---
@@ -39,11 +39,17 @@ This project was created as a backend practice project to implement a RESTful AP
 
 ---
 
+## 🚀 Deployment
+
+The application is containerized using Docker and deployed on Render.
+
+---
+
 ## 🌐 Live API
 
 Base URL:
 
-https://taskapi.up.railway.app/api/v1/tasks
+https://task-api-production-uuqo.onrender.com/api/v1/tasks
 
 ---
 
@@ -51,7 +57,7 @@ https://taskapi.up.railway.app/api/v1/tasks
 
 Swagger UI:
 
-https://taskapi.up.railway.app/swagger-ui/index.html
+https://task-api-production-uuqo.onrender.com/swagger-ui/index.html
 
 ---
 
@@ -145,7 +151,7 @@ Spring Boot Actuator is enabled to monitor application health.
 
 Base URL:
 
-https://taskapi.up.railway.app/actuator
+https://task-api-production-uuqo.onrender.com/actuator
 
 Endpoint:
 
@@ -155,9 +161,9 @@ Example:
 
 también válido:
 
-🩺 GET https://taskapi.up.railway.app/actuator/health
+🩺 GET https://task-api-production-uuqo.onrender.com/actuator/health
 
-📈 GET https://taskapi.up.railway.app/actuator/info
+📈 GET https://task-api-production-uuqo.onrender.com/actuator/info
 
 
 ```json
@@ -202,9 +208,11 @@ The application requires the following environment variables:
 The application uses Spring profiles:
 
 - local → local development
-- prod → production (Railway)
+- prod → production environment (Render)
+- staging → staging environment (Render)
+- test → test environment
 
-Railway uses environment variables to configure the database connection.
+Render uses environment variables to configure the database connection.
 
 ---
 
@@ -212,7 +220,7 @@ Railway uses environment variables to configure the database connection.
         
 1. **Clone the repository**
 
-`git clone https://github.com/kalil87/task-api.`
+`git clone https://github.com/kalil87/task-api`
         
 2. **Go to the project directory**
 
