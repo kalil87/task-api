@@ -10,6 +10,9 @@ jobs:
   deploy-staging:
     if: github.ref == 'refs/heads/develop'
     runs-on: ubuntu-latest
+    environment:
+      name: staging
+      url: https://task-api-z45w.onrender.com/swagger-ui/index.html
 
     steps:
       - name: Trigger Render Deploy (staging)
@@ -18,6 +21,9 @@ jobs:
   deploy-production:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://task-api-production-uuqo.onrender.com/swagger-ui/index.html
 
     steps:
       - name: Trigger Render Deploy (production)
