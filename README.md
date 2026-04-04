@@ -226,14 +226,13 @@ Render uses environment variables to configure the database connection.
 
 `cd task-api`
         
-3. **Run the application**
+3. **Run the application (Bash / Git Bash required)**
 
 `./run-local.sh`
 
 4. **API URL**
 
 `http://localhost:8080/api/v1/tasks`
-
 
 ---
 
