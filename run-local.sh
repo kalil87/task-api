@@ -1,2 +1,1 @@
-#run-local.sh
-./mvnw spring-boot:run -Dspring-boot.run.profiles=local
+SPRING_PROFILES_ACTIVE=local ./mvnw spring-boot:run
