@@ -1,30 +1,58 @@
-name: Deploy
+#name: Deploy
+#
+#on:
+#  workflow_run:
+#    workflows: ["CI-NEW"]
+#    types:
+#      - completed
+#
+#jobs:
+#  deploy-staging:
+#    if: >
+#      github.event.workflow_run.conclusion == 'success' &&
+#      github.event.workflow_run.head_branch == 'develop'
+#
+#    runs-on: ubuntu-latest
+#
+#    environment:
+#      name: staging
+#      url: https://task-api-z45w.onrender.com/swagger-ui/index.html
+#
+#    steps:
+#      - name: Trigger Render Deploy (staging)
+#        run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_STAGING }}
+#
+#  deploy-production:
+#    if: >
+#      github.event.workflow_run.conclusion == 'success' &&
+#      github.event.workflow_run.head_branch == 'main'
+#
+#    runs-on: ubuntu-latest
+#
+#    environment:
+#      name: production
+#      url: https://task-api-production-uuqo.onrender.com/swagger-ui/index.html
+#
+#    steps:
+#      - name: Trigger Render Deploy (production)
+#        run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_PRODUCTION }}
+
+
+name: Debug Deploy Trigger
 
 on:
-  push:
-    branches:
-      - main
-      - develop
+  workflow_run:
+    workflows: ["*"]   # 👈 escucha TODOS
+    types:
+      - completed
 
 jobs:
-  deploy-staging:
-    if: github.ref == 'refs/heads/develop'
+  debug:
     runs-on: ubuntu-latest
-    environment:
-      name: staging
-      url: https://task-api-z45w.onrender.com/swagger-ui/index.html
 
     steps:
-      - name: Trigger Render Deploy (staging)
-        run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_STAGING }}
-
-  deploy-production:
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    environment:
-      name: production
-      url: https://task-api-production-uuqo.onrender.com/swagger-ui/index.html
-
-    steps:
-      - name: Trigger Render Deploy (production)
-        run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_PRODUCTION }}
+      - name: Print workflow info
+        run: |
+          echo "Workflow name: ${{ github.event.workflow_run.name }}"
+          echo "Workflow path: ${{ github.event.workflow_run.path }}"
+          echo "Branch: ${{ github.event.workflow_run.head_branch }}"
