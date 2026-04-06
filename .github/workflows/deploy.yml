@@ -36,11 +36,14 @@
 #    steps:
 #      - name: Trigger Render Deploy (production)
 #        run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_PRODUCTION }}
-name: Deploy
+
+
+
+name: Debug Deploy Trigger
 
 on:
   workflow_run:
-    workflows: ["CI-NEW"]   # probá con este
+    workflows: ["*"]
     types:
       - completed
 
@@ -49,5 +52,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Print debug
-        run: echo "🚀 Llegó al deploy workflow"
+      - name: Print workflow info
+        run: |
+          echo "Workflow name: ${{ github.event.workflow_run.name }}"
+          echo "Workflow path: ${{ github.event.workflow_run.path }}"
+          echo "Branch: ${{ github.event.workflow_run.head_branch }}"
