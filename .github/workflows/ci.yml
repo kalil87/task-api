@@ -1,4 +1,4 @@
-name: CI-NEW
+name: CI
 
 on:
   push:
