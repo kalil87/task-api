@@ -1,0 +1,13 @@
+target/
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+nbproject/
+nbbuild/
+dist/
+nbdist/
+logs/
+.env
+.git/
