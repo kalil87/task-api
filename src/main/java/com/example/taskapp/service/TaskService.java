@@ -1,10 +1,10 @@
 package com.example.taskapp.service;
 
-import com.example.taskapp.dto.TaskCreateDTO;
-import com.example.taskapp.dto.TaskResponseDTO;
+import com.example.taskapp.dto.request.TaskRequestDTO;
+import com.example.taskapp.dto.response.TaskResponseDTO;
 import com.example.taskapp.exception.TaskNotFoundException;
 import com.example.taskapp.mapper.TaskMapper;
-import com.example.taskapp.model.Task;
+import com.example.taskapp.entity.Task;
 import com.example.taskapp.repository.TaskRepository;
 import com.example.taskapp.util.Message;
 import lombok.extern.slf4j.Slf4j;
@@ -23,15 +23,6 @@ public class TaskService {
         this.mapper = mapper;
     }
 
-    private Task findTask(Long id) {
-        log.info("Searching task with id: {}", id);
-        return repository.findById(id)
-                .orElseThrow(() -> {
-                    log.warn("Task not found with id: {}", id);
-                    return new TaskNotFoundException(Message.TASK_NOT_FOUND);
-                });
-    }
-
     public Page<TaskResponseDTO> getAll(Pageable pageable){
         log.info("Fetching all tasks with pagination: {}", pageable);
         return repository.findAll(pageable).map(mapper::toDTO);
@@ -44,7 +35,7 @@ public class TaskService {
         return mapper.toDTO(task);
     }
 
-    public TaskResponseDTO create(TaskCreateDTO dto) {
+    public TaskResponseDTO create(TaskRequestDTO dto) {
         log.info("Creating task with title: {}", dto.title());
         Task task = mapper.toEntity(dto);
         Task saved = repository.save(task);
@@ -52,7 +43,7 @@ public class TaskService {
         return mapper.toDTO(saved);
     }
 
-    public TaskResponseDTO update(Long id, TaskCreateDTO dto) {
+    public TaskResponseDTO update(Long id, TaskRequestDTO dto) {
         log.info("Updating task with id: {}", id);
         Task existing = findTask(id);
         existing.updateTitle(dto.title());
@@ -67,5 +58,13 @@ public class TaskService {
         Task task = findTask(id);
         repository.delete(task);
         log.info("Task deleted with id: {}", id);
+    }
+
+    private Task findTask(Long id) {
+        log.info("Searching task with id: {}", id);
+        return repository.findById(id)
+                .orElseThrow(() -> {
+                    log.warn("Task not found with id: {}", id);
+                    return new TaskNotFoundException(Message.TASK_NOT_FOUND);});
     }
 }

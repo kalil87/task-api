@@ -19,83 +19,68 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    private ResponseEntity<ErrorResponse> buildErrorResponse(
-            HttpStatus status,
-            String error,
-            String message,
-            HttpServletRequest request,
-            Map<String,String> errors
-    ) {
-
-        ErrorResponse response = new ErrorResponse(
-                LocalDateTime.now(),
-                status.value(),
-                error,
-                message,
-                request.getRequestURI(),
-                errors
-        );
-
-        return ResponseEntity
-                .status(status)
-                .header(Message.APP_VERSION_HEADER, Message.APP_VERSION)
-                .body(response);
-    }
-
     @ExceptionHandler(TaskNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleTaskNotFound(
-            TaskNotFoundException ex,
-            HttpServletRequest request
-    ) {
+    public ResponseEntity<ErrorResponse> handleTaskNotFound(TaskNotFoundException ex, HttpServletRequest request) {
+
         return buildErrorResponse(
                 HttpStatus.NOT_FOUND,
                 Message.NOT_FOUND,
                 Message.TASK_NOT_FOUND,
                 request,
-                null
-        );
+                null);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleUserNotFound(UserNotFoundException ex, HttpServletRequest request) {
+
+        return buildErrorResponse(
+                HttpStatus.NOT_FOUND,
+                Message.NOT_FOUND,
+                Message.USER_NOT_FOUND,
+                request,
+                null);
+    }
+
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidCredentials(InvalidCredentialsException ex, HttpServletRequest request) {
+
+        return buildErrorResponse(
+                HttpStatus.UNAUTHORIZED,
+                Message.UNAUTHORIZED,
+                Message.VALIDATION_ERROR,
+                request,
+                null);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleValidation(
-            MethodArgumentNotValidException ex,
-            HttpServletRequest request
-    ) {
+    public ResponseEntity<ErrorResponse> handleValidation(MethodArgumentNotValidException ex, HttpServletRequest request) {
 
         Map<String, String> errors = new HashMap<>();
 
         ex.getBindingResult().getFieldErrors().forEach(error ->
-                errors.put(error.getField(), error.getDefaultMessage())
-        );
+                errors.put(error.getField(), error.getDefaultMessage()));
 
         return buildErrorResponse(
                 HttpStatus.BAD_REQUEST,
                 Message.VALIDATION_ERROR,
                 Message.INVALID_REQUEST,
                 request,
-                errors
-        );
+                errors);
     }
 
     @ExceptionHandler(NoResourceFoundException.class)
-    public ResponseEntity<ErrorResponse> handleNoResourceFound(
-            NoResourceFoundException ex,
-            HttpServletRequest request
-    ) {
+    public ResponseEntity<ErrorResponse> handleNoResourceFound(NoResourceFoundException ex, HttpServletRequest request) {
+
         return buildErrorResponse(
                 HttpStatus.NOT_FOUND,
                 Message.NOT_FOUND,
                 Message.ENDPOINT_NOT_FOUND,
                 request,
-                null
-        );
+                null);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleGenericException(
-            Exception ex,
-            HttpServletRequest request
-    ) {
+    public ResponseEntity<ErrorResponse> handleGenericException(Exception ex, HttpServletRequest request) {
 
         log.error(Message.UNEXPECTED_ERROR, ex);
 
@@ -104,7 +89,22 @@ public class GlobalExceptionHandler {
                 Message.INTERNAL_ERROR,
                 Message.UNEXPECTED_ERROR,
                 request,
-                null
-        );
+                null);
+    }
+
+    private ResponseEntity<ErrorResponse> buildErrorResponse(HttpStatus status, String error, String message, HttpServletRequest request, Map<String,String> errors) {
+
+        ErrorResponse response = new ErrorResponse(
+                LocalDateTime.now(),
+                status.value(),
+                error,
+                message,
+                request.getRequestURI(),
+                errors);
+
+        return ResponseEntity
+                .status(status)
+                .header(Message.APP_VERSION_HEADER, Message.APP_VERSION)
+                .body(response);
     }
 }

@@ -1,10 +1,8 @@
 package com.example.taskapp.mapper;
 
-import com.example.taskapp.dto.TaskCreateDTO;
-import com.example.taskapp.dto.TaskResponseDTO;
-import com.example.taskapp.model.Task;
-
-import java.util.List;
+import com.example.taskapp.dto.request.TaskRequestDTO;
+import com.example.taskapp.dto.response.TaskResponseDTO;
+import com.example.taskapp.entity.Task;
 
 import org.mapstruct.Mapper;
 
@@ -13,5 +11,5 @@ public interface TaskMapper {
 
     TaskResponseDTO toDTO(Task task);
 
-    Task toEntity(TaskCreateDTO dto);
+    Task toEntity(TaskRequestDTO dto);
 }

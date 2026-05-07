@@ -1,4 +1,4 @@
-package com.example.taskapp.model;
+package com.example.taskapp.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

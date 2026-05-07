@@ -1,6 +1,6 @@
 package com.example.taskapp.mapper;
 
-import com.example.taskapp.dto.PageResponse;
+import com.example.taskapp.dto.response.PageResponse;
 import org.springframework.data.domain.Page;
 
 public class PageMapper {

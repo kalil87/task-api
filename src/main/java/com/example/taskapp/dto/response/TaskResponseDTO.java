@@ -1,4 +1,4 @@
-package com.example.taskapp.dto;
+package com.example.taskapp.dto.response;
 
 public record TaskResponseDTO(
         Long id,
